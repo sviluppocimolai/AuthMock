@@ -1,0 +1,45 @@
+﻿@page "/fetchProjects"
+@using AuthMock.Client.Services
+@using AuthMock.DTO
+@inject HttpClient Http
+
+<PageTitle>Projects list</PageTitle>
+
+<h1>Projects list</h1>
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (projects == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projects)
+            {
+                <tr>
+                    <td>@project.Code</td>
+                    <td>@project.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Project> projects;
+
+    [Inject] IProjectsService ProjectsService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        projects = await ProjectsService.GetAsync();
+    }
+}

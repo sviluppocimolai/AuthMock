@@ -1,0 +1,41 @@
+﻿@inject NavigationManager _navigationManager
+@inject SignOutSessionStateManager _signOutSessionStateManager
+
+<h1>TEST</h1>
+
+<AuthorizeView>
+    <Authorized>
+        <BarItem>
+            <BarDropdownDivider/>
+            <BarDropdown>
+                <BarDropdownToggle >
+                    <BarIcon IconName="FontAwesomeIcons.UserCircle" />
+                    @context.User.Identity.Name
+                </BarDropdownToggle>
+                 <BarDropdownMenu>
+                     <BarDropdownItem Clicked="BeginLogout">
+                        <BarIcon IconName="FontAwesomeIcons.SignOutAlt" />
+                        Logout
+                    </BarDropdownItem>
+                 </BarDropdownMenu>
+            </BarDropdown>
+        </BarItem>
+    </Authorized>
+    <NotAuthorized>
+        <BarItem>
+            <BarLink To="/authentication/login">
+                <BarIcon IconName="IconName.User" />
+                Login
+            </BarLink>              
+        </BarItem>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    private async Task BeginLogout()
+	{
+		await _signOutSessionStateManager.SetSignOutState();
+		_navigationManager.NavigateTo("authentication/logout");
+	}
+}
